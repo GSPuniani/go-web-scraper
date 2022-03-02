@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
-
+	"io/ioutil"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
 )
@@ -38,8 +38,13 @@ func main() {
 		// Print mission
         fmt.Printf("Upcoming mission: %s\n", upcomingMissions.Mission)
 
+		// Print mission in JSON format
 		missionsJSON, _ := json.Marshal(upcomingMissions)
 		fmt.Println(string(missionsJSON))
+
+		// Save mission to JSON file
+		file, _ := json.MarshalIndent(upcomingMissions, "", " ")
+		_ = ioutil.WriteFile("output.json", file, 0644)
 	})
 
 	c.OnError(func(_ *colly.Response, err error) {
