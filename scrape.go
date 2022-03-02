@@ -25,16 +25,15 @@ func main() {
 	)
 	extensions.RandomUserAgent(c)
 
+
 	// Mission Title
-	c.OnHTML("h3", func(e *colly.HTMLElement) {
-		fmt.Print("Hi")
-        nasaUpcomingMission := &scrapedData {
+	c.OnHTML("h5", func(e *colly.HTMLElement) {
+        upcomingMissions := &scrapedData {
 			Mission: e.Text,
 		}
-		
 
 		// Print link
-        fmt.Printf("Link found: %q -> %s\n", e.Text, nasaUpcomingMission.Mission)
+        fmt.Printf("Upcoming mission: %s\n", upcomingMissions.Mission)
 	})
 
 	c.OnError(func(_ *colly.Response, err error) {
@@ -52,17 +51,6 @@ func main() {
 		fmt.Println("Visited", r.Request.URL)
 	})
 	
-	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
-		e.Request.Visit(e.Attr("href"))
-	})
-	
-	c.OnHTML("tr td:nth-of-type(1)", func(e *colly.HTMLElement) {
-		fmt.Println("First column of a table row:", e.Text)
-	})
-	
-	c.OnXML("//h1", func(e *colly.XMLElement) {
-		fmt.Println(e.Text)
-	})
 	
 	c.OnScraped(func(r *colly.Response) {
 		fmt.Println("Finished", r.Request.URL)
@@ -70,5 +58,5 @@ func main() {
 
 
 	// Start scraping on NASA's upcoming launches page
-	c.Visit("https://www.nasa.gov/launchschedule/")
+	c.Visit("https://nextspaceflight.com/launches/")
 }
