@@ -1,7 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"strings"
+
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
 )
@@ -29,11 +32,14 @@ func main() {
 	// Mission Title
 	c.OnHTML("h5", func(e *colly.HTMLElement) {
         upcomingMissions := &scrapedData {
-			Mission: e.Text,
+			Mission: strings.TrimSpace(e.Text),
 		}
 
-		// Print link
+		// Print mission
         fmt.Printf("Upcoming mission: %s\n", upcomingMissions.Mission)
+
+		missionsJSON, _ := json.Marshal(upcomingMissions)
+		fmt.Println(string(missionsJSON))
 	})
 
 	c.OnError(func(_ *colly.Response, err error) {
